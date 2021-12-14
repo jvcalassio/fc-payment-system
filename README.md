@@ -9,11 +9,11 @@ para compor cada parte do sistema:
 
 ## Frontend
 
-O frontend (será) é desenvolvido em Next.js
+O frontend foi desenvolvido em Next.js
 
 ## Backend
 
-O backend é desenvolvido em Nest.js (npm), e processa os pedidos vindos do front-end.
+O backend foi desenvolvido em Nest.js (npm), e processa os pedidos vindos do front-end.
 
 ## Pagamento
 
@@ -21,15 +21,15 @@ Os pagamentos de cada pedido são processados em uma aplicação desenvolvida em
 
 ## Comunicação
 
-Os serviços se comunicam entre si através do Apache Kafka, e a comunicação do backend com o frontend é feita através 
+Os serviços se comunicam entre si através do Apache Kafka, e a comunicação do backend com o frontend é feita através
 de APIs REST.
-
-## Observabilidade
-
-O monitoramento de tudo isso (será) é feito através do Prometheus e Grafana.
 
 ---
 
-As diferentes partes do sistema foram reunidas em um único repositório para facilitar a organização do projeto em meu perfil, mas poderiam (e deveriam) ser separadas em repositórios individuais.
+## Executar:
 
-(wip, assim como os outros readmes e o restante do projeto)
+Executar com o Docker Compose (modo desenvolvimento)
+
+```
+    docker-compose up -d
+```

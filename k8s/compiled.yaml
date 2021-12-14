@@ -1,0 +1,113 @@
+apiVersion: v1
+data:
+  DB_CONNECTION: bXlzcWw=
+  DB_DATABASE: ZmM=
+  DB_HOST: ZmluY3ljbGUtbXlzcWw=
+  DB_PASSWORD: eDJCZ1phOUowSg==
+  DB_PORT: MzMwNg==
+  DB_USERNAME: cm9vdA==
+  KAFKA_CLIENT_ID: ZmMtYmFja2VuZA==
+  KAFKA_CONSUMER_GROUP_ID: ZmMtYmFja2VuZA==
+  KAFKA_HOST: MTI3LjAuMC4xOjkwOTQ=
+  KAFKA_USE_SSL: ZmFsc2U=
+kind: Secret
+metadata:
+  name: backend
+type: Opaque
+---
+apiVersion: v1
+data:
+  BOOTSTRAP_SERVERS: MTI3LjAuMC4xOjkwOTQ=
+  MYSQL_DATABASE: Z2F0ZXdheQ==
+  MYSQL_HOST: ZmluY3ljbGUtbXlzcWw=
+  MYSQL_PASSWORD: eDJCZ1phOUowSg==
+  MYSQL_USERNAME: cm9vdA==
+kind: Secret
+metadata:
+  name: gateway
+type: Opaque
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+spec:
+  ports:
+  - port: 80
+    targetPort: 3000
+  selector:
+    app: backend
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  ports:
+  - port: 80
+    targetPort: 3000
+  selector:
+    app: frontend
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - envFrom:
+        - secretRef:
+            name: backend
+        image: jvcalassio/fc-backend:latest
+        name: backend
+        ports:
+        - containerPort: 3000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - image: jvcalassio/fc-frontend:latest
+        name: frontend
+        ports:
+        - containerPort: 3000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway
+spec:
+  selector:
+    matchLabels:
+      app: gateway
+  template:
+    metadata:
+      labels:
+        app: gateway
+    spec:
+      containers:
+      - envFrom:
+        - secretRef:
+            name: gateway
+        image: jvcalassio/fc-payment-gateway:latest
+        name: gateway

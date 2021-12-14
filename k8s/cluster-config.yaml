@@ -1,0 +1,11 @@
+# cluster-config.yml
+apiVersion: kind.x-k8s.io/v1alpha4
+kind: Cluster
+name: fincycle
+nodes:
+  - role: control-plane
+    image: kindest/node:v1.17.17@sha256:66f1d0d91a88b8a001811e2f1054af60eef3b669a9a74f9b6db871f2f1eeed00
+    extraPortMappings:
+      - containerPort: 30000
+        hostPort: 30000
+        protocol: TCP
