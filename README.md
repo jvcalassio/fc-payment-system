@@ -1,35 +1,64 @@
-# Sistema de Pagamentos FC
+# Sistema de Pagamentos Fincycle
 
-Desenvolvido durante a [Imersão Full Stack && Full Cycle](https://imersao.fullcycle.com.br/evento/).
+_Desenvolvido durante a [Imersão Full Stack && Full Cycle](https://imersao.fullcycle.com.br/evento/)._
 
-Neste projeto, é implementado uma solução para um sistema de pagamentos.
+Neste projeto, é implementada uma solução para um sistema de pagamentos com o objetivo de aprender um pouco mais sobre conceitos de microsserviços, containers, kubernetes, clean architecture, e diferentes linguagens e ferramentas.
 
-São utilizados conceitos de microserviços, TDD, clean architecture, e diferentes linguagens e ferramentas
-para compor cada parte do sistema:
+No sistema, há uma interface web para consulta das ordens de pagamento. Essa interface se comunica com um backend através de uma API REST. O servidor backend salva cada ordem e se comunica com um serviço que é responsável por processar cada pagamento (como uma operadora de cartão de crédito) e retornar se foi aprovada ou não.
+
+![Diagrama do sistema](/model/c4model.png "Diagrama do sistema")
+
+## Tecnologias
+
+Todo o sistema é baseado em microsserviços, e foram desenvolvidos utilizando containers Docker.
+
+Kubernetes é utilizado para orquestração dos containers em produção.
 
 ## Frontend
 
-O frontend foi desenvolvido em Next.js
+##### [jvcalassio/fc-frontend](https://github.com/jvcalassio/fc-frontend)
+
+O frontend do sistema foi desenvolvido em React, utilizando o framework Next.js.
+Há um serviço para realizar a renderização em servidor.
 
 ## Backend
 
-O backend foi desenvolvido em Nest.js (npm), e processa os pedidos vindos do front-end.
+##### [jvcalassio/fc-backend](https://github.com/jvcalassio/fc-backend)
 
-## Pagamento
+O backend foi desenvolvido em Nest.js e é responsável por disponibilizar a API REST e armazenar todas as ordens de pagamento.
 
-Os pagamentos de cada pedido são processados em uma aplicação desenvolvida em Golang.
+## Processamento do pagamento
+
+##### [jvcalassio/fc-payment-gateway](https://github.com/jvcalassio/fc-payment-gateway)
+
+Cada pagamento é processado através de um serviço desenvolvido em Golang, que analisa a transação, valida e comunica o resultado ao backend.
 
 ## Comunicação
 
-Os serviços se comunicam entre si através do Apache Kafka, e a comunicação do backend com o frontend é feita através
-de APIs REST.
+Os serviços se comunicam entre si através do Apache Kafka, fora a já citada API REST.
 
 ---
 
-## Executar:
+## Execução em desenvolvimento:
 
-Executar com o Docker Compose (modo desenvolvimento)
+Para execução em modo de desenvolvimento, é utilizado o [Docker Compose](https://docs.docker.com/compose/install/).
+
+É necessário clonar este repositório, e também o repositório de cada microsserviço.
+
+```
+    git clone https://github.com/jvcalassio/fc-payment-system.git
+    cd fc-payment-system
+    git clone https://github.com/jvcalassio/fc-payment-gateway.git
+    git clone https://github.com/jvcalassio/fc-backend.git
+    git clone https://github.com/jvcalassio/fc-frontend.git
+```
+
+E então, executar o docker compose deste repositório, que irá subir os containers de todos os serviços:
 
 ```
     docker-compose up -d
 ```
+
+Se tudo ocorrer como esperado, será possível acessar o frontend no endereço http://host.docker.internal:3001
+
+Para o correto funcionamento, é necessário que o endereço _host.docker.internal_ aponte para _127.0.0.1_ no arquivo hosts de seu sistema.
