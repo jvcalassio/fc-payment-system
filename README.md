@@ -56,7 +56,7 @@ Para execução em modo de desenvolvimento, é utilizado o [Docker Compose](http
 E então, executar o docker compose deste repositório, que irá subir os containers de todos os serviços:
 
 ```
-    docker-compose up -d
+    docker-compose up -d --build
 ```
 
 Se tudo ocorrer como esperado, será possível acessar o frontend no endereço http://host.docker.internal:3001
